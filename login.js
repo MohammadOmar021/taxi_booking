@@ -12,20 +12,23 @@ if(signup){
     let Phone = document.getElementById("Phone").value
 
     
-createUserWithEmailAndPassword(auth, email, password, Name, Phone)
+createUserWithEmailAndPassword(auth, email, password, Name)
   .then((userCredential) => {
     // Signed up 
       
     const user = userCredential.user;
     updateProfile(auth.currentUser, {
   displayName: Name,
-        phoneNumber: Phone
+       
 }).then(() => {
           // ✅ Now call saveUser with valid user and phone
-          saveUser(user);
+           saveUser(user, Phone);
+        }).then(()=>{
+          
+          console.log("User--->", user)
+          location="booking_page.html";
+
         });
-  
-    console.log("User--->", user)
   
     // ...
     
@@ -66,12 +69,13 @@ signInWithEmailAndPassword(auth, email, password)
 })
 }
 
-let saveUser = async(user)=>{
+let saveUser = async(user, Phone)=>{
+  // const phoneNumber = "03020244975";
      await setDoc(doc(db, "users", user.uid), {
       name: user.displayName,
       email: user.email,
     uid: user.uid,
-    phone: user.phoneNumber
+    phone: Phone
     });
-    console.log("Document successfully written!");
+    console.log("Document successfully written!", Phone);
 }
